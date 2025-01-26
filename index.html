@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | SeenIt</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="media/logo.png" type="image/x-icon">
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="nav">
+        <a href="/" class="logo"><img src="/media/logo.png" /> SeenIt</a>
+        <a href="watched.html" class="nav-link">Watched</a>
+        <a href="liked.html" class="nav-link">Liked</a>
+        <a href="watchlist.html" class="nav-link">Watchlist</a>
+      </div>
+      <div class="hero">
+        <div class="hero-overlay">
+          <h1 class="hero-title">SeenIt: Track your Movies and TV Shows</h1>
+          <p class="hero-description">
+            Built with simplicity in mind, SeenIt is the best platform for tracking movies, TV shows, anime, and more that you've
+            watched.
+          </p>
+          <form class="hero-search" id="hero-search">
+            <select name="type" id="mode" class="search-dropdown">
+              <option value="movies">Movies</option>
+              <option value="shows">Shows</option>
+            </select>
+            <input type="text" class="search-input" id="search-input" placeholder="Search a title" />
+            <button class="search-btn" type="submit">Go</button>
+          </form>
+        </div>
+      </div>
+      <div id="results" class="results">
+        Search from the search box above and start tracking the movies and TV shows you've watched!
+      </div>
+      <footer>
+        <div class="footer-container">
+          <div class="footer-about">
+            <h2>About SeeIt</h2>
+            <p>
+              We are a team of developers committed to providing the simplest way for you to add, track, and manage movies, TV
+              shows, and more that you've watched.
+            </p>
+          </div>
+          <div class="footer-contact">
+            <h2>Contact Us</h2>
+            <p>Email: tonyforself@gmail.com</p>
+            <p>GitHub: tonymac129</p>
+          </div>
+          <div class="footer-links">
+            <h2>Quick Links</h2>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="movies.html">Movies</a></li>
+              <li><a href="shows.html">Shows</a></li>
+              <li><a href="profile.html">Profile</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 SeeIt. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+    <script>
+      const heroSearch = document.getElementById("hero-search");
+      const searchMode = document.getElementById("mode");
+      const searchInput = document.getElementById("search-input");
+      const resultsE = document.getElementById("results");
+
+      heroSearch.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const query = searchInput.value.trim("").toLowerCase();
+        if (query === "") {
+          return;
+        }
+        resultsE.innerHTML = "Searching through hundreds of thousands of titles...";
+
+        try {
+          let results = [];
+          if (searchMode.value === "movies") {
+            results = await searchMovies(query);
+          } else {
+            results = await searchShows(query);
+          }
+          resultsE.innerHTML = "";
+
+          if (results.length === 0) {
+            resultsE.innerHTML = "Sorry, no results found. Try searching with a different name?";
+            return;
+          }
+          appendTitles(results);
+        } catch (err) {
+          console.error("Error fetching results:", err);
+        }
+      });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
